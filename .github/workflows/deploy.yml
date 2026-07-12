@@ -1,0 +1,12 @@
+name: Manual Vercel Deploy Trigger
+
+on:
+  workflow_dispatch: # Actions 탭에 수동 실행 버튼을 만듭니다.
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Vercel Deployment
+        run: |
+          curl -X POST "${{ secrets.VERCEL_DEPLOY_HOOK_URL }}"
