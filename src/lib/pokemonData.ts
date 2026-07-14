@@ -384,9 +384,27 @@ export async function fetchPokemonCardPrices(
 
     const totalPages = Math.ceil(data.totalCount / pageSize);
 
+    // Deduplicate cards based on unique card ID and image URL
+    const seenIds = new Set<string>();
+    const seenUrls = new Set<string>();
+    const uniqueCards: PokemonCard[] = [];
+
+    for (const card of mappedCards) {
+      const isDuplicateId = seenIds.has(card.id);
+      const isDuplicateUrl = card.imageUrl ? seenUrls.has(card.imageUrl) : false;
+
+      if (!isDuplicateId && !isDuplicateUrl) {
+        seenIds.add(card.id);
+        if (card.imageUrl) {
+          seenUrls.add(card.imageUrl);
+        }
+        uniqueCards.push(card);
+      }
+    }
+
     return {
-      cards: mappedCards,
-      totalCount: data.totalCount,
+      cards: uniqueCards,
+      totalCount: Math.max(0, data.totalCount - (mappedCards.length - uniqueCards.length)),
       page: data.page,
       totalPages: totalPages || 1
     };
