@@ -7,6 +7,8 @@ export interface PokemonCard {
   number: string;
   rarity: string;
   imageUrl: string;
+  setNameKr?: string; // Korean pack name
+  setNameEn?: string; // English pack name
   grades: {
     grade: string; // PSA 10 ~ 1 or JP levels (Raw, HR, SR, etc.)
     priceKrw: number;
@@ -230,6 +232,15 @@ export function generateDynamicFallbackCard(query: string, isJapanese: boolean):
         { grade: "PSA 1", priceKrw: Math.round(basePrice * 0.45), priceUsd: (basePrice * 0.45) / 1300, history30d: generateHistoryData(Math.round(basePrice * 0.45)) },
       ];
 
+  // Match local set list if set query is detected
+  let fallbackSetName = "기본 부스터 팩";
+  for (const set of pokemonSetList) {
+    if (query.toLowerCase().includes(set.kr.toLowerCase()) || query.toLowerCase().includes(set.id.toLowerCase())) {
+      fallbackSetName = set.kr;
+      break;
+    }
+  }
+
   return {
     id: cardId,
     nameKr: krName.includes(" ") ? krName : `${krName} (스페셜 에디션)`,
@@ -238,6 +249,8 @@ export function generateDynamicFallbackCard(query: string, isJapanese: boolean):
     number: cardNumber,
     rarity: randomRarity,
     imageUrl: selectedImage,
+    setNameKr: fallbackSetName,
+    setNameEn: "Booster Pack",
     grades
   };
 }
@@ -370,14 +383,32 @@ export async function fetchPokemonCardPrices(
           ];
 
       // Format card names based on set values where possible
+      const setId = card.set?.id?.toLowerCase() || "";
+      const setMap: Record<string, string> = {
+        "sv4a": "샤이니 보물 ex",
+        "sv8": "초전 브레이커",
+        "sv3": "흑염의 지배자",
+        "sv2d": "클레이 버스트",
+        "sv2p": "스노해저드",
+        "sv6": "변환의 가면",
+        "sv7": "스텔라 미라클",
+        "sv7a": "낙원 드래고나",
+        "sv5m": "사이버 저지",
+        "sv5k": "와일드 포스",
+        "sv2a": "151"
+      };
+      const krSetName = setMap[setId] || card.set?.name || "기타 카드팩";
+
       return {
         id: card.id,
-        nameKr: card.set?.name ? `${card.set.name} - ${card.name}` : card.name,
-        nameJp: card.set?.name ? `${card.set.name} - ${card.name}` : card.name,
-        nameEn: card.set?.name ? `${card.set.name} - ${card.name}` : card.name,
+        nameKr: card.name,
+        nameJp: card.name,
+        nameEn: card.name,
         number: card.number || "0/0",
         rarity: card.rarity || "Uncommon",
         imageUrl: card.images?.large || card.images?.small || card.imageUrl || "",
+        setNameKr: krSetName,
+        setNameEn: card.set?.name || "Booster Pack",
         grades
       };
     });

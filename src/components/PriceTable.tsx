@@ -79,6 +79,11 @@ export default function PriceTable({ card, isJapanese }: PriceTableProps) {
               <div className="text-[10px] text-slate-400 font-medium">
                 {card.nameEn}
               </div>
+              <div className="mt-1">
+                <span className="inline-block px-1.5 py-0.5 bg-slate-800/80 text-slate-300 rounded text-[9px] font-bold border border-slate-700">
+                  📦 수록 팩: {card.setNameKr || "해외 부스터 팩"}
+                </span>
+              </div>
             </div>
           </div>
         </td>
@@ -95,6 +100,11 @@ export default function PriceTable({ card, isJapanese }: PriceTableProps) {
               </span>
               <span className="text-[9px] md:text-[10px] text-slate-500 font-semibold tracking-wider">
                 ID: {card.id}
+              </span>
+            </div>
+            <div className="pt-1">
+              <span className="inline-block px-1.5 py-0.5 bg-slate-800/80 text-slate-300 rounded text-[9px] font-bold border border-slate-700">
+                📦 수록 팩: {card.setNameKr || "해외 부스터 팩"}
               </span>
             </div>
           </div>
