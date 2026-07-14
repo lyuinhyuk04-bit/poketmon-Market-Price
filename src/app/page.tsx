@@ -220,20 +220,35 @@ export default function Home() {
 
       {/* Search Results Display */}
       {!loading && query && cards.length > 0 && (
-        <div className="space-y-6">
+        <div className="w-full max-w-4xl mx-auto px-4 space-y-6">
           {/* Total Results Summary Header */}
-          <div className="w-full max-w-4xl mx-auto px-6 flex items-center justify-between text-xs text-slate-400 font-bold bg-slate-950/30 py-2 rounded-xl border border-slate-900">
+          <div className="w-full px-6 flex items-center justify-between text-xs text-slate-400 font-bold bg-slate-950/30 py-3 rounded-2xl border border-slate-900 shadow-inner">
             <span>검색결과: 총 {totalCount}개</span>
             <span>페이지: {currentPage} / {totalPages}</span>
           </div>
 
-          {cards.map((card) => (
-            <PriceTable key={card.id} card={card} isJapanese={isJapanese} />
-          ))}
+          {/* Grid-to-Table Container */}
+          <div className="w-full overflow-hidden bg-slate-900/20 border border-slate-800/80 rounded-3xl backdrop-blur-md shadow-2xl">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left border-collapse min-w-[600px]">
+                <thead>
+                  <tr className="border-b border-slate-800 bg-slate-950/40 text-[10px] md:text-xs font-bold text-indigo-300 uppercase tracking-wider">
+                    <th className="px-4 py-4 md:px-6">카드 사진</th>
+                    <th className="px-4 py-4 md:px-6">포켓몬 이름</th>
+                    <th className="px-4 py-4 md:px-6">카드 등급 (Rarity)</th>
+                    <th className="px-4 py-4 md:px-6 text-right">현재 가격 (Raw)</th>
+                  </tr>
+                </thead>
+                {cards.map((card) => (
+                  <PriceTable key={card.id} card={card} isJapanese={isJapanese} />
+                ))}
+              </table>
+            </div>
+          </div>
 
           {/* Pagination Navigation Controller */}
           {totalPages > 1 && (
-            <div className="w-full max-w-4xl mx-auto px-4 py-4 flex items-center justify-between bg-slate-900/40 border border-slate-800 rounded-2xl shadow-lg backdrop-blur">
+            <div className="w-full px-4 py-4 flex items-center justify-between bg-slate-900/40 border border-slate-800 rounded-2xl shadow-lg backdrop-blur">
               <button
                 type="button"
                 disabled={currentPage === 1}
