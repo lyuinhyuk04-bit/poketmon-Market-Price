@@ -10,18 +10,23 @@ interface AffiliateButtonsProps {
 export default function AffiliateButtons({ searchQuery }: AffiliateButtonsProps) {
   // Safe fallback if search query is empty
   const query = searchQuery || "포켓몬 카드";
+  
+  // Append negative search operators to filter out binder, album, storage case, and toploader products
+  // This ensures users only see actual collectible card listings on shopping platforms.
+  const filterKeywords = `${query} -바인더 -보관 -앨범 -케이스 -탑로더`;
   const encodedQuery = encodeURIComponent(query);
+  const encodedFilteredQuery = encodeURIComponent(filterKeywords);
 
   // Affiliate URL configurations
-  // 1. Coupang partners lowest price link (Replace AFXXXXXXX with actual partners ID)
-  const partnersId = "AF9998887"; // Placeholder for Coupang Partners ID
-  const coupangUrl = `https://link.coupang.com/re/AFFSDP?lptag=${partnersId}&subid=pokeprice&pageKey=search&q=${encodedQuery}`;
+  // 1. Coupang partners lowest price link (Using filtered query)
+  const partnersId = "AF9998887";
+  const coupangUrl = `https://link.coupang.com/re/AFFSDP?lptag=${partnersId}&subid=pokeprice&pageKey=search&q=${encodedFilteredQuery}`;
   
-  // 2. Naver Shopping lowest price comparison link
-  const naverUrl = `https://search.shopping.naver.com/search/all?query=${encodedQuery}`;
+  // 2. Naver Shopping lowest price comparison link (Using filtered query)
+  const naverUrl = `https://search.shopping.naver.com/search/all?query=${encodedFilteredQuery}`;
   
-  // 3. Bunjang real-time second-hand listings
-  const bunjangUrl = `https://m.bunjang.co.kr/search/products?q=${encodedQuery}`;
+  // 3. Bunjang real-time second-hand listings (Using filtered query)
+  const bunjangUrl = `https://m.bunjang.co.kr/search/products?q=${encodedFilteredQuery}`;
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4 my-8">
