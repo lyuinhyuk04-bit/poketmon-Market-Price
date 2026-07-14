@@ -243,9 +243,9 @@ export function generateDynamicFallbackCard(query: string, isJapanese: boolean):
 
   return {
     id: cardId,
-    nameKr: krName.includes(" ") ? krName : `${krName} (스페셜 에디션)`,
-    nameJp: jpName.includes(" ") ? jpName : `${jpName} (スペシャル版)`,
-    nameEn: enName.includes(" ") ? enName : `${enName} (Special Ed.)`,
+    nameKr: krName,
+    nameJp: jpName,
+    nameEn: enName,
     number: cardNumber,
     rarity: randomRarity,
     imageUrl: selectedImage,

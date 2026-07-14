@@ -90,9 +90,6 @@ export default function PriceTable({ card, isJapanese }: PriceTableProps) {
               <h3 className="font-extrabold text-sm text-white tracking-wide leading-snug">
                 {isJapanese ? card.nameJp : card.nameKr}
               </h3>
-              <div className="text-[10px] text-slate-400 font-medium">
-                {card.nameEn}
-              </div>
               <div className="mt-1">
                 <span className="inline-block px-1.5 py-0.5 bg-slate-800/80 text-slate-300 rounded text-[9px] font-bold border border-slate-700">
                   📦 수록 팩: {card.setNameKr || "해외 부스터 팩"}
@@ -102,21 +99,13 @@ export default function PriceTable({ card, isJapanese }: PriceTableProps) {
           </div>
         </td>
 
-        {/* Column 2: Card Name & Set Info */}
+        {/* Column 2: Card Name & Set Info (Hidden in mobile since it is rendered next to image) */}
         <td className="hidden md:table-cell px-4 py-4 md:px-6">
-          <div className="space-y-1">
+          <div className="space-y-1.5">
             <h3 className="font-extrabold text-sm md:text-base text-white tracking-wide leading-snug">
               {isJapanese ? card.nameJp : card.nameKr}
             </h3>
-            <div className="flex flex-col gap-0.5">
-              <span className="text-[10px] md:text-xs text-slate-400 font-medium">
-                English: {card.nameEn}
-              </span>
-              <span className="text-[9px] md:text-[10px] text-slate-500 font-semibold tracking-wider">
-                ID: {card.id}
-              </span>
-            </div>
-            <div className="pt-1">
+            <div>
               <span className="inline-block px-1.5 py-0.5 bg-slate-800/80 text-slate-300 rounded text-[9px] font-bold border border-slate-700">
                 📦 수록 팩: {card.setNameKr || "해외 부스터 팩"}
               </span>

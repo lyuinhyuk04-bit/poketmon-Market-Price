@@ -158,7 +158,7 @@ function generateSetMockCards(setId: string, page: number, pageSize: number): { 
     
     cards.push({
       id: `${setId}-${i}`,
-      name: `${trans.kr} ex (${rarity} #${i})`,
+      name: `${trans.kr} ex`,
       rarity: rarity,
       number: `${i}/${requiredCount}`,
       imageUrl: dynamicImg,
@@ -204,7 +204,7 @@ function getLocalMockSearchResults(query: string, page: number, pageSize: number
       const basePrice = Math.round((Math.floor(Math.random() * 120000) + 15000) / 100) * 100;
       setCards.push({
         id: `mock-${matchedEnName}-${i}`,
-        name: `${matchedName} (${rarity} #${i})`,
+        name: matchedName,
         rarity: rarity,
         number: `${i}/${requiredCount}`,
         imageUrl: dynamicImg,
