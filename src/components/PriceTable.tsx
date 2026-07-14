@@ -47,33 +47,44 @@ export default function PriceTable({ card, isJapanese }: PriceTableProps) {
   const displayPriceUsd = defaultGrade ? defaultGrade.priceUsd : 0;
 
   return (
-    <tbody className="border-b border-slate-800/60 bg-slate-900/10 hover:bg-slate-900/30 transition-colors duration-200">
+    <tbody className="block md:table-row-group border-b border-slate-800/60 bg-slate-900/10 hover:bg-slate-900/20 transition-colors duration-200">
       
       {/* Primary Card Data Row */}
       <tr 
         onClick={() => setIsExpanded(!isExpanded)}
-        className="cursor-pointer transition-all duration-150 active:bg-slate-900/50"
+        className="flex flex-col md:table-row px-4 py-4 md:px-0 md:py-0 cursor-pointer select-none active:bg-slate-900/40"
       >
         {/* Column 1: Card Image */}
-        <td className="px-4 py-4 md:px-6">
-          <div className="relative group w-14 h-20 md:w-16 md:h-22 flex-shrink-0 bg-slate-950 rounded-lg overflow-hidden border border-slate-800/80 shadow-md">
-            {card.imageUrl ? (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img
-                src={card.imageUrl}
-                alt={card.nameKr}
-                className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
-              />
-            ) : (
-              <div className="w-full h-full flex flex-col items-center justify-center text-slate-700">
-                <ImageIcon size={18} />
+        <td className="block md:table-cell py-2 md:py-4 md:pl-6">
+          <div className="flex md:block items-center gap-4">
+            <div className="relative group w-14 h-20 md:w-16 md:h-22 flex-shrink-0 bg-slate-950 rounded-lg overflow-hidden border border-slate-800/80 shadow-md">
+              {card.imageUrl ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={card.imageUrl}
+                  alt={card.nameKr}
+                  className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+                />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center text-slate-700">
+                  <ImageIcon size={18} />
+                </div>
+              )}
+            </div>
+            {/* Mobile-only layout helper: Show title next to image on mobile */}
+            <div className="block md:hidden flex-1 space-y-1">
+              <h3 className="font-extrabold text-sm text-white tracking-wide leading-snug">
+                {isJapanese ? card.nameJp : card.nameKr}
+              </h3>
+              <div className="text-[10px] text-slate-400 font-medium">
+                {card.nameEn}
               </div>
-            )}
+            </div>
           </div>
         </td>
 
-        {/* Column 2: Card Name & Set Info */}
-        <td className="px-4 py-4 md:px-6">
+        {/* Column 2: Card Name & Set Info (Hidden in mobile since it is rendered next to image) */}
+        <td className="hidden md:table-cell px-4 py-4 md:px-6">
           <div className="space-y-1">
             <h3 className="font-extrabold text-sm md:text-base text-white tracking-wide leading-snug">
               {isJapanese ? card.nameJp : card.nameKr}
@@ -89,50 +100,59 @@ export default function PriceTable({ card, isJapanese }: PriceTableProps) {
           </div>
         </td>
 
-        {/* Column 3: Card Rarity / Grade (Lower Left) */}
-        <td className="px-4 py-4 md:px-6">
-          <div className="flex flex-col gap-1 items-start">
+        {/* Column 3: Card Rarity / Grade */}
+        <td className="block md:table-cell py-2 md:py-4 md:px-6">
+          <div className="flex md:flex-col gap-1.5 items-center md:items-start text-[10px]">
             <span className="px-2 py-0.5 bg-indigo-500/10 text-indigo-300 border border-indigo-500/25 rounded-md text-[10px] md:text-xs font-bold uppercase tracking-wider">
               {card.rarity || "COMMON"}
             </span>
             <span className="text-[9px] md:text-[10px] text-slate-400 font-bold bg-slate-950/60 px-1.5 py-0.5 rounded border border-slate-800">
               #{card.number}
             </span>
+            {/* Mobile-only metadata labels */}
+            <span className="block md:hidden text-[9px] text-slate-500 font-bold ml-auto">
+              ID: {card.id}
+            </span>
           </div>
         </td>
 
         {/* Column 4: Present Price & Toggle Chevron */}
-        <td className="px-4 py-4 md:px-6 text-right">
-          <div className="flex items-center justify-end gap-3 md:gap-4">
-            <div className="space-y-0.5">
-              {defaultGrade ? (
-                <>
-                  <div className="text-sm md:text-base font-black text-indigo-400">
-                    {formatCurrency(displayPriceKrw)}
-                  </div>
-                  <div className="text-[9px] md:text-[10px] text-slate-500 font-bold">
-                    {formatUsd(displayPriceUsd)} ({defaultGrade.grade})
-                  </div>
-                </>
-              ) : (
-                <span className="text-xs text-slate-500 font-bold">시세 정보 없음</span>
-              )}
-            </div>
+        <td className="block md:table-cell py-2 md:py-4 md:px-6 text-right border-t border-slate-800/40 md:border-t-0 mt-2 md:mt-0">
+          <div className="flex items-center justify-between md:justify-end gap-3 md:gap-4">
+            {/* Mobile-only price label */}
+            <span className="block md:hidden text-xs font-bold text-slate-500">현재 최저가 (Raw)</span>
             
-            <ChevronDown
-              size={16}
-              className={`text-slate-500 transition-transform duration-300 ${
-                isExpanded ? "transform rotate-180 text-indigo-400" : ""
-              }`}
-            />
+            <div className="flex items-center gap-3">
+              <div className="text-right space-y-0.5">
+                {defaultGrade ? (
+                  <>
+                    <div className="text-base md:text-base font-black text-indigo-400">
+                      {formatCurrency(displayPriceKrw)}
+                    </div>
+                    <div className="text-[10px] md:text-[10px] text-slate-500 font-bold">
+                      {formatUsd(displayPriceUsd)} ({defaultGrade.grade})
+                    </div>
+                  </>
+                ) : (
+                  <span className="text-xs text-slate-500 font-bold">시세 정보 없음</span>
+                )}
+              </div>
+              
+              <ChevronDown
+                size={16}
+                className={`text-slate-500 transition-transform duration-300 ${
+                  isExpanded ? "transform rotate-180 text-indigo-400" : ""
+                }`}
+              />
+            </div>
           </div>
         </td>
       </tr>
 
       {/* Secondary Chart Accordion Row */}
       {isExpanded && (
-        <tr className="bg-slate-950/40 border-t border-slate-800/40">
-          <td colSpan={4} className="px-4 py-6 md:px-8">
+        <tr className="block md:table-row bg-slate-950/40 border-t border-slate-800/40">
+          <td colSpan={4} className="block md:table-cell px-4 py-6 md:px-8">
             <div className="max-w-3xl mx-auto space-y-6">
               
               {/* Header inside Chart box */}
@@ -172,7 +192,7 @@ export default function PriceTable({ card, isJapanese }: PriceTableProps) {
 
               {/* Chart Component for Selected Grade */}
               {activeGradeData && (
-                <div className="animate-fade-in">
+                <div className="w-full overflow-hidden">
                   <PriceChart 
                     data={activeGradeData.history30d} 
                     gradeName={`${isJapanese ? card.nameJp : card.nameKr} [${activeGradeData.grade}]`} 

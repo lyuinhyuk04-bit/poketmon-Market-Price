@@ -229,14 +229,14 @@ export default function Home() {
 
           {/* Grid-to-Table Container */}
           <div className="w-full overflow-hidden bg-slate-900/20 border border-slate-800/80 rounded-3xl backdrop-blur-md shadow-2xl">
-            <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse min-w-[600px]">
-                <thead>
-                  <tr className="border-b border-slate-800 bg-slate-950/40 text-[10px] md:text-xs font-bold text-indigo-300 uppercase tracking-wider">
-                    <th className="px-4 py-4 md:px-6">카드 사진</th>
-                    <th className="px-4 py-4 md:px-6">포켓몬 이름</th>
-                    <th className="px-4 py-4 md:px-6">카드 등급 (Rarity)</th>
-                    <th className="px-4 py-4 md:px-6 text-right">현재 가격 (Raw)</th>
+            <div className="w-full">
+              <table className="w-full text-left border-collapse block md:table">
+                <thead className="hidden md:table-header-group">
+                  <tr className="border-b border-slate-800 bg-slate-950/40 text-xs font-bold text-indigo-300 uppercase tracking-wider md:table-row">
+                    <th className="px-6 py-4 md:table-cell">카드 사진</th>
+                    <th className="px-6 py-4 md:table-cell">포켓몬 이름</th>
+                    <th className="px-6 py-4 md:table-cell">카드 등급 (Rarity)</th>
+                    <th className="px-6 py-4 text-right md:table-cell">현재 가격 (Raw)</th>
                   </tr>
                 </thead>
                 {cards.map((card) => (
