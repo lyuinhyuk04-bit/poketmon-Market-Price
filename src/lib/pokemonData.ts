@@ -415,12 +415,26 @@ export async function fetchPokemonCardPrices(
 
     const totalPages = Math.ceil(data.totalCount / pageSize);
 
-    // Deduplicate cards based on unique card ID and image URL
+    // Deduplicate cards based on unique card ID and image URL + Exclude binder/album storage accessories
     const seenIds = new Set<string>();
     const seenUrls = new Set<string>();
     const uniqueCards: PokemonCard[] = [];
+    
+    // Keywords to filter out non-card collector storage and packages
+    const excludedAccessoryKeywords = [
+      "binder", "portfolio", "album", "tin", "deck box", 
+      "storage case", "accessory", "playmat", "sleeves"
+    ];
 
     for (const card of mappedCards) {
+      // Exclude if card name contains collector accessories like binder or storage album
+      const lowerName = card.nameEn.toLowerCase();
+      const isAccessory = excludedAccessoryKeywords.some(keyword => lowerName.includes(keyword));
+
+      if (isAccessory) {
+        continue; // Skip binder and album storage items
+      }
+
       const isDuplicateId = seenIds.has(card.id);
       const isDuplicateUrl = card.imageUrl ? seenUrls.has(card.imageUrl) : false;
 
