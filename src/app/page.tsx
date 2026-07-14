@@ -247,39 +247,67 @@ export default function Home() {
           </div>
 
           {/* Pagination Navigation Controller */}
-          {totalPages > 1 && (
-            <div className="w-full px-4 py-4 flex items-center justify-between bg-slate-900/40 border border-slate-800 rounded-2xl shadow-lg backdrop-blur">
-              <button
-                type="button"
-                disabled={currentPage === 1}
-                onClick={() => handleSearch(query, currentPage - 1)}
-                className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
-                  currentPage === 1
-                    ? "bg-slate-950/20 border-slate-900 text-slate-600 cursor-not-allowed"
-                    : "bg-slate-900 hover:bg-slate-800 border-slate-800 text-slate-300 hover:text-white"
-                }`}
-              >
-                이전 페이지
-              </button>
+          {totalPages > 1 && (() => {
+            // Helper to generate dynamic sliding window of page numbers
+            const maxVisiblePages = 5;
+            let startPage = Math.max(1, currentPage - 2);
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+            if (endPage - startPage + 1 < maxVisiblePages) {
+              startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+            const pageNumbers = [];
+            for (let i = startPage; i <= endPage; i++) {
+              pageNumbers.push(i);
+            }
 
-              <span className="text-xs text-slate-300 font-bold">
-                {currentPage} / {totalPages}
-              </span>
+            return (
+              <div className="w-full px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-4 bg-slate-900/40 border border-slate-800 rounded-2xl shadow-lg backdrop-blur">
+                <button
+                  type="button"
+                  disabled={currentPage === 1}
+                  onClick={() => handleSearch(query, currentPage - 1)}
+                  className={`w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+                    currentPage === 1
+                      ? "bg-slate-950/20 border-slate-900 text-slate-600 cursor-not-allowed"
+                      : "bg-slate-900 hover:bg-slate-800 border-slate-800 text-slate-300 hover:text-white"
+                  }`}
+                >
+                  이전 페이지
+                </button>
 
-              <button
-                type="button"
-                disabled={currentPage === totalPages}
-                onClick={() => handleSearch(query, currentPage + 1)}
-                className={`px-4 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
-                  currentPage === totalPages
-                    ? "bg-slate-950/20 border-slate-900 text-slate-600 cursor-not-allowed"
-                    : "bg-slate-900 hover:bg-slate-800 border-slate-800 text-slate-300 hover:text-white"
-                }`}
-              >
-                다음 페이지
-              </button>
-            </div>
-          )}
+                {/* Clickable Page Numbers */}
+                <div className="flex flex-wrap items-center justify-center gap-1.5">
+                  {pageNumbers.map((pageNumber) => (
+                    <button
+                      key={pageNumber}
+                      type="button"
+                      onClick={() => handleSearch(query, pageNumber)}
+                      className={`w-8 h-8 rounded-xl text-xs font-black border transition-all cursor-pointer flex items-center justify-center ${
+                        currentPage === pageNumber
+                          ? "bg-indigo-600 border-indigo-500 text-white shadow-md shadow-indigo-600/20 scale-105"
+                          : "bg-slate-900 hover:bg-slate-800 border-slate-800 text-slate-400 hover:text-white"
+                      }`}
+                    >
+                      {pageNumber}
+                    </button>
+                  ))}
+                </div>
+
+                <button
+                  type="button"
+                  disabled={currentPage === totalPages}
+                  onClick={() => handleSearch(query, currentPage + 1)}
+                  className={`w-full sm:w-auto px-4 py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+                    currentPage === totalPages
+                      ? "bg-slate-950/20 border-slate-900 text-slate-600 cursor-not-allowed"
+                      : "bg-slate-900 hover:bg-slate-800 border-slate-800 text-slate-300 hover:text-white"
+                  }`}
+                >
+                  다음 페이지
+                </button>
+              </div>
+            );
+          })()}
 
           {/* Affiliate buttons for the current query */}
           <AffiliateButtons searchQuery={query} />
